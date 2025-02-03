@@ -1,20 +1,19 @@
 ---
 author: Franco Calvo
-pubDatetime: 2025-01-29 20:48
-title: Poor's man AWS Glue: Nix + PySpark + Fargate
+pubDatetime: 2025-01-29T21:00:12Z
+title: Poor's man AWS Glue - Nix + PySpark + Fargate
 slug: nix+pyspark+fargate+1
 featured: true
-draft: true
+draft: false
 tags:
   - nix
   - spark
   - fargate
 description:
-  Creación de un entorno de PySpark serverless en Fargate de forma 
-  reproducible con Nix
+  Alternativa a AWS Glue Jobs con la creación de jobs en Spark de forma 
+  serverless mediante el uso de Fargate, con builds y entornos de desarrollo
+  reproducibles y declarativos con Nix.
 ---
-
-# Poor's man AWS Glue: Nix + PySpark + Fargate
 
 ## Introducción
 
