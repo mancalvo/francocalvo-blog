@@ -5,15 +5,18 @@ title: Poor's man AWS Glue - Nix + PySpark + Fargate
 slug: nix+pyspark+fargate+1
 featured: true
 draft: false
+ogImage: ../../assets/nix-spark-fargate/header.svg
 tags:
   - nix
   - spark
   - fargate
 description:
-  Alternativa a AWS Glue Jobs con la creación de jobs en Spark de forma 
+  Alternativa a AWS Glue Jobs con la creación de jobs en Spark de forma
   serverless mediante el uso de Fargate, con builds y entornos de desarrollo
   reproducibles y declarativos con Nix.
 ---
+
+![Tech icons](../../assets/nix-spark-fargate/header-dark.svg)
 
 ## Introducción
 
@@ -87,6 +90,8 @@ recursos como sea necesario y sin manejar clusters!
 
 ### Spark, Fargate... Nix?
 
+![Iceberg is here too](../../assets/nix-spark-fargate/iceberg.svg)
+
 Como dice el titulo, la propuesta a este problema es "Nix + PySpark + Fargate".
 Ya habiendo explicado el porque de dos tercios de la ecuación, pasamos al
 tercero (y más esotérico), que es la clave para lograr entornos reproducibles y
@@ -126,6 +131,8 @@ _quickstart_ para usar Nix con uv:
 [nix-python-demo](https://github.com/francocalvo/nix-python-demo/tree/main)
 
 ### Spark? No, DuckDB 🥷
+
+![enter duckdb](../../assets/nix-spark-fargate/duckdb.svg)
 
 Lo que venimos discutiendo hasta ahora, a alguien que le interesan temas
 relacionados a
