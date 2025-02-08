@@ -1,0 +1,48 @@
+ <script>
+
+function findImageExtensionRange(str) {
+    const regex = /\.(svg|png|jpe?g)(?=%3F|[&?]|$)/i;
+    const match = str.match(regex);
+
+    if (!match) {
+        return { start: -1, end: -1 };
+    }
+
+    const start = match.index ?? -1;
+    const end = start + match[0].length;
+    return { start, end };
+}
+
+  function updateImagesForTheme() {
+    const theme = document.documentElement.dataset.theme;
+    const imgs = document.querySelectorAll('img');
+    imgs.forEach(img => {
+      const originalSrc = img.dataset.originalSrc || img.getAttribute('src');
+
+      if (!img.dataset.originalSrc) {
+        img.dataset.originalSrc = originalSrc;
+      }
+
+      if (theme === 'dark') {
+        const range = findImageExtensionRange(originalSrc)
+        if (originalSrc.slice(range.start - 3, range.start) != "-dk") {
+          img.src = originalSrc.slice(0, range.start) + "-dk" + originalSrc.slice(range.start, range.end);
+        }
+      } else {
+        // If light theme, restore original
+        img.src = originalSrc.replace(/-dk/, '');
+      }
+    });
+  }
+
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        updateImagesForTheme();
+      }
+    }
+  });
+  observer.observe(document.documentElement, { attributes: true });
+
+  updateImagesForTheme();
+</script>

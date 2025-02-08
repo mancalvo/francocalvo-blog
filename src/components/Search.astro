@@ -1,0 +1,135 @@
+---
+import Fuse from "fuse.js";
+import Card from "@components/Card.astro";
+import type { CollectionEntry } from "astro:content";
+import { getLangFromUrl, getUrlFromLangAndTarget } from '../i18n/utils';
+
+export interface Props {
+  searchList: {
+    title: string;
+    description: string;
+    data: CollectionEntry<"blog">["data"];
+    slug: string;
+  }[];
+}
+
+const { searchList } = Astro.props;
+const initialQuery = Astro.url.searchParams.get("q") || "";
+const lang = getLangFromUrl(Astro.url);
+---
+
+<label class="relative block">
+  <span class="absolute inset-y-0 left-0 flex items-center pl-2 opacity-75">
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path>
+    </svg>
+    <span class="sr-only">Search</span>
+  </span>
+  <input
+    class="block w-full rounded border border-skin-fill/40 bg-skin-fill py-3 pl-10 pr-3 placeholder:italic focus:border-skin-accent focus:outline-none"
+    placeholder="Search for anything..."
+    type="text"
+    name="search"
+    value={initialQuery}
+    id="search-input"
+    autocomplete="off"
+  />
+</label>
+
+<div id="search-results" class="mt-8 hidden">
+  Found <span id="result-count">0</span> 
+  <span id="result-text">results</span> for '<span id="query-text"></span>'
+</div>
+
+<ul id="results-list"></ul>
+
+<script define:vars={{ searchList, lang }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('results-list');
+    const searchResults = document.getElementById('search-results');
+    const resultCount = document.getElementById('result-count');
+    const resultText = document.getElementById('result-text');
+    const queryText = document.getElementById('query-text');
+
+    const fuse = new Fuse(searchList, {
+      keys: ['title', 'description'],
+      includeMatches: true,
+      minMatchCharLength: 2,
+      threshold: 0.5,
+    });
+
+    function updateResults(query) {
+      const results = query.length > 1 ? fuse.search(query) : [];
+
+      // Update results count and text
+      if (results.length > 0) {
+        searchResults.classList.remove('hidden');
+        resultCount.textContent = results.length;
+        resultText.textContent = results.length === 1 ? " result" : " results";
+        queryText.textContent = query;
+      } else {
+        searchResults.classList.add('hidden');
+      }
+
+      // Update results list using Card component
+      resultsContainer.innerHTML = results
+        .map(({ item }, index) => `
+          <card-wrapper
+            href="${getUrlFromLangAndTarget(lang, 'posts/' + item.slug)}"
+            data-frontmatter='${JSON.stringify(item.data)}'
+            data-key="${index}-${item.slug}"
+          ></card-wrapper>
+        `).join('');
+
+      // Initialize Card components
+      document.querySelectorAll('card-wrapper').forEach(wrapper => {
+        const href = wrapper.getAttribute('href');
+        const frontmatter = JSON.parse(wrapper.getAttribute('data-frontmatter'));
+        const key = wrapper.getAttribute('data-key');
+
+        // Create Card component (you'll need to implement this based on your Card component structure)
+        const cardHtml = createCard(href, frontmatter, key);
+        wrapper.outerHTML = cardHtml;
+      });
+    }
+
+    // Initial search from URL
+    if (searchInput.value) {
+      updateResults(searchInput.value);
+    }
+
+    // Input event listener
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value;
+      updateResults(query);
+
+      // Update URL without reload
+      const url = new URL(window.location);
+      if (query.length > 0) {
+        url.searchParams.set('q', query);
+      } else {
+        url.searchParams.delete('q');
+      }
+      history.replaceState(null, '', url);
+    });
+
+    // Focus input on load
+    searchInput.focus();
+    searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+  });
+
+  // Helper function to create Card HTML (implement based on your Card component)
+  function createCard(href, frontmatter, key) {
+    // This is a placeholder - implement according to your Card component structure
+    return `
+      <li>
+        <a href="${href}" class="block mb-4">
+          <h3 class="text-xl font-bold">${frontmatter.title}</h3>
+          <p class="text-gray-600">${frontmatter.description}</p>
+        </a>
+      </li>
+    `;
+  }
+</script>
+

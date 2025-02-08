@@ -7,11 +7,11 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import SearchBar from "@components/Search";
 import getSortedPosts from "@utils/getSortedPosts";
-import { getLangFromUrl, getUrlFromLangAndTarget } from '../i18n/utils';
+import { getLangFromUrl, getUrlFromLangAndTarget } from '../../i18n/utils';
 
 const language = getLangFromUrl(Astro.url);
 // Retrieve all published articles
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = await getCollection("blogEn", ({ data }) => !data.draft);
 const sortedPosts = getSortedPosts(posts);
 
 // List of items to search in

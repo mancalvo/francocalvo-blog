@@ -1,0 +1,39 @@
+---
+import { languages, ui } from '../i18n/ui';
+import { extractPathAfterLanguage } from '../i18n/utils';
+
+// Get the current pathname and extract the path after language
+const pathname = new URL(Astro.url).pathname;
+const pathAfterLang = extractPathAfterLanguage(Astro.url);
+const currentLang = pathname.startsWith('/en') ? 'en' : 'es';
+---
+<ul>
+  {Object.entries(languages).map(([language, label]) => {
+    const targetPath = ui[language as keyof typeof ui].target;
+    // If we have a target (en) add it to the path, otherwise just use the path
+    const href = targetPath 
+      ? `/${targetPath}${pathAfterLang.startsWith('/') ? pathAfterLang : `/${pathAfterLang}`}` 
+      : `${pathAfterLang.startsWith('/') ? pathAfterLang : `/${pathAfterLang}`}`;
+
+    return (
+      <li>
+        <a 
+          href={href.replace(/\/+/g, '/')} 
+          class:list={[
+            'language-link',
+            { active: currentLang === language }
+          ]}
+        >
+          {label}
+        </a>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .language-link.active {
+    font-weight: bold;
+  }
+</style>
+

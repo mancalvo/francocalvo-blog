@@ -7,4 +7,10 @@ const getPostsByTag = (posts: CollectionEntry<"blog">[], tag: string) =>
     posts.filter(post => slugifyAll(post.data.tags).includes(tag))
   );
 
-export default getPostsByTag;
+const getPostsByTagEn = (posts: CollectionEntry<"blogEn">[], tag: string) =>
+  getSortedPosts(
+    posts.filter(post => slugifyAll(post.data.tags).includes(tag))
+  );
+
+
+export default { getPostsByTag, getPostsByTagEn };

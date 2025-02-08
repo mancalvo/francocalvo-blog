@@ -8,6 +8,8 @@ import type { CollectionEntry } from "astro:content";
 import { slugifyStr } from "@utils/slugify";
 import ShareLinks from "@components/ShareLinks.astro";
 import { SITE } from "@config";
+import { getLangFromUrl, getUrlFromLangAndTarget } from '../i18n/utils';
+import ThemeImageHandler from "@components/ThemeImageHandler.astro"
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -15,6 +17,7 @@ export interface Props {
 }
 
 const { post, posts } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
 
 const {
   title,
@@ -63,7 +66,7 @@ const nextPost =
 
 <Layout {...layoutProps}>
   <Header />
-
+  <ThemeImageHandler />
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
       class="focus-outline mb-2 mt-8 flex hover:opacity-75"
@@ -119,7 +122,7 @@ const nextPost =
       {
         prevPost && (
           <a
-            href={`/posts/${prevPost.slug}`}
+            href={getUrlFromLangAndTarget(lang, 'posts/' + prevPost.slug)}
             class="flex w-full gap-1 hover:opacity-75"
           >
             <svg
@@ -149,7 +152,7 @@ const nextPost =
       {
         nextPost && (
           <a
-            href={`/posts/${nextPost.slug}`}
+            href={getUrlFromLangAndTarget(lang, 'posts/' + nextPost.slug)}
             class="flex w-full justify-end gap-1 text-right hover:opacity-75 sm:col-start-2"
           >
             <div>

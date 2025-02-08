@@ -8,12 +8,14 @@ import Card from "@components/Card";
 import { SITE } from "@config";
 import type { Page } from "astro";
 import type { CollectionEntry } from "astro:content";
+import { getLangFromUrl, getUrlFromLangAndTarget } from '../i18n/utils';
 
 export interface Props {
   page: Page<CollectionEntry<"blog">>;
 }
 
 const { page } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <Layout title={`Posts | ${SITE.title}`}>
@@ -22,7 +24,7 @@ const { page } = Astro.props;
     <ul>
       {
         page.data.map(({ data, slug }) => (
-          <Card href={`/posts/${slug}/`} frontmatter={data} />
+          <Card href={getUrlFromLangAndTarget(lang, 'posts/' + slug)} frontmatter={data} />
         ))
       }
     </ul>

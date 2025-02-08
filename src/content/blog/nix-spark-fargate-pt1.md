@@ -5,7 +5,7 @@ title: Poor man's AWS Glue - Nix + PySpark + Fargate
 slug: nix+pyspark+fargate+1
 featured: true
 draft: false
-ogImage: ../../assets/nix-spark-fargate/header.svg
+ogImage: /../../assets/nix-spark-fargate/header.svg
 tags:
   - nix
   - spark
@@ -16,7 +16,7 @@ description:
   reproducibles y declarativos con Nix.
 ---
 
-![Tech icons](../../assets/nix-spark-fargate/header-dark.svg)
+![Tech icons](../../assets/nix-spark-fargate/header.svg)
 
 ## Introducción
 

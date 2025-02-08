@@ -7,11 +7,11 @@ import type { GetStaticPathsOptions } from "astro";
 import { SITE } from "@config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const posts = await getCollection("blog");
+  const posts = await getCollection("blogEn");
   const tags = getUniqueTags(posts);
 
   return tags.flatMap(({ tag, tagName }) => {
-    const tagPosts = getPBT.getPostsByTag(posts, tag);
+    const tagPosts = getPBT.getPostsByTagEn(posts, tag);
 
     return paginate(tagPosts, {
       params: { tag },
